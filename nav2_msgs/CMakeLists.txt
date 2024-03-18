@@ -44,6 +44,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "srv/AddShapes.srv"
   "srv/RemoveShapes.srv"
   "srv/GetShapes.srv"
+  "srv/SetInitialPose.srv"
   "action/AssistedTeleop.action"
   "action/BackUp.action"
   "action/ComputePathToPose.action"
