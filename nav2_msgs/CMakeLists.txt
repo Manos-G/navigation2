@@ -45,6 +45,7 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "srv/RemoveShapes.srv"
   "srv/GetShapes.srv"
   "srv/SetInitialPose.srv"
+  "srv/ReloadDockDatabase.srv"
   "action/AssistedTeleop.action"
   "action/BackUp.action"
   "action/ComputePathToPose.action"
@@ -59,6 +60,9 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "action/DummyBehavior.action"
   "action/FollowWaypoints.action"
   "action/FollowGPSWaypoints.action"
+  "action/DockRobot.action"
+  "action/UndockRobot.action"
+  
   DEPENDENCIES
     builtin_interfaces
     geometry_msgs
