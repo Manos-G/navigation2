@@ -23,6 +23,8 @@ nav2_package()
 
 set(library_name ${PROJECT_NAME}_core)
 
+include_directories(include)
+
 add_subdirectory(src)
 
 install(DIRECTORY include/
