@@ -25,6 +25,7 @@
   <depend>bond</depend>
   <depend>rclcpp_action</depend>
   <depend>rclcpp_lifecycle</depend>
+  <depend>nav2_costmap_2d</depend>
   <depend>launch</depend>
   <depend>launch_testing_ament_cmake</depend>
   <depend>action_msgs</depend>
