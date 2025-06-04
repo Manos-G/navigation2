@@ -30,6 +30,7 @@
 #include "nav2_util/node_utils.hpp"
 #include "nav2_util/geometry_utils.hpp"
 #include "nav2_costmap_2d/cost_values.hpp"
+#include "nav2_util/shared_costmap.hpp"
 
 #include "nav2_planner/planner_server.hpp"
 
@@ -60,9 +61,9 @@ PlannerServer::PlannerServer(const rclcpp::NodeOptions & options)
     }
   }
 
-  // Setup the global costmap
-  costmap_ros_ = std::make_shared<nav2_costmap_2d::Costmap2DROS>(
-    "global_costmap", std::string{get_namespace()}, "global_costmap");
+  // Setup the shared costmap
+  nav2_util::init_shared_costmap(std::string{get_namespace()});
+  costmap_ros_ = nav2_util::shared_costmap;
 }
 
 PlannerServer::~PlannerServer()
@@ -80,11 +81,13 @@ PlannerServer::on_configure(const rclcpp_lifecycle::State & /*state*/)
 {
   RCLCPP_INFO(get_logger(), "Configuring");
 
-  costmap_ros_->configure();
+  if (!nav2_util::shared_costmap_initialized) {
+    costmap_ros_->configure();
+    nav2_util::shared_costmap_thread =
+      std::make_unique<nav2_util::NodeThread>(costmap_ros_);
+    nav2_util::shared_costmap_initialized = true;
+  }
   costmap_ = costmap_ros_->getCostmap();
-
-  // Launch a thread to run the costmap node
-  costmap_thread_ = std::make_unique<nav2_util::NodeThread>(costmap_ros_);
 
   RCLCPP_DEBUG(
     get_logger(), "Costmap size: %d,%d",
