@@ -62,7 +62,7 @@ PlannerServer::PlannerServer(const rclcpp::NodeOptions & options)
   }
 
   // Setup the shared costmap
-  nav2_util::init_shared_costmap(std::string{get_namespace()});
+  nav2_util::init_shared_costmap(std::string{get_namespace()}, "global_costmap");
   costmap_ros_ = nav2_util::shared_costmap;
 }
 

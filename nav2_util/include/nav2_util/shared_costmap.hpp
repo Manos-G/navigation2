@@ -11,8 +11,11 @@ namespace nav2_util
 extern std::shared_ptr<nav2_costmap_2d::Costmap2DROS> shared_costmap;
 extern std::unique_ptr<nav2_util::NodeThread> shared_costmap_thread;
 extern bool shared_costmap_initialized;
+extern std::string shared_costmap_name;
 
-void init_shared_costmap(const std::string & parent_namespace);
+void init_shared_costmap(
+  const std::string & parent_namespace,
+  const std::string & costmap_name);
 
 }  // namespace nav2_util
 
