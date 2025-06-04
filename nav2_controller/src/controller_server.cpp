@@ -25,6 +25,7 @@
 #include "nav_2d_utils/tf_help.hpp"
 #include "nav2_util/node_utils.hpp"
 #include "nav2_util/geometry_utils.hpp"
+#include "nav2_util/shared_costmap.hpp"
 #include "nav2_controller/controller_server.hpp"
 
 using namespace std::chrono_literals;
@@ -61,9 +62,10 @@ ControllerServer::ControllerServer(const rclcpp::NodeOptions & options)
 
   declare_parameter("failure_tolerance", rclcpp::ParameterValue(0.0));
 
-  // The costmap node is used in the implementation of the controller
-  costmap_ros_ = std::make_shared<nav2_costmap_2d::Costmap2DROS>(
-    "local_costmap", std::string{get_namespace()}, "local_costmap");
+  // The costmap node is shared between planner and controller
+  nav2_util::init_shared_costmap(
+    std::string{get_namespace()}, "shared_costmap");
+  costmap_ros_ = nav2_util::shared_costmap;
 }
 
 ControllerServer::~ControllerServer()
@@ -120,9 +122,12 @@ ControllerServer::on_configure(const rclcpp_lifecycle::State & /*state*/)
   get_parameter("speed_limit_topic", speed_limit_topic);
   get_parameter("failure_tolerance", failure_tolerance_);
 
-  costmap_ros_->configure();
-  // Launch a thread to run the costmap node
-  costmap_thread_ = std::make_unique<nav2_util::NodeThread>(costmap_ros_);
+  if (!nav2_util::shared_costmap_initialized) {
+    costmap_ros_->configure();
+    nav2_util::shared_costmap_thread =
+      std::make_unique<nav2_util::NodeThread>(costmap_ros_);
+    nav2_util::shared_costmap_initialized = true;
+  }
 
   try {
     progress_checker_type_ = nav2_util::get_plugin_type_param(node, progress_checker_id_);

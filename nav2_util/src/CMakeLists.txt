@@ -8,6 +8,7 @@ add_library(${library_name} SHARED
   robot_utils.cpp
   node_thread.cpp
   odometry_utils.cpp
+  shared_costmap.cpp
 )
 
 ament_target_dependencies(${library_name}
@@ -21,6 +22,7 @@ ament_target_dependencies(${library_name}
   rclcpp_lifecycle
   tf2_geometry_msgs
   bondcpp
+  nav2_costmap_2d
 )
 
 add_executable(lifecycle_bringup
