@@ -63,7 +63,8 @@ ControllerServer::ControllerServer(const rclcpp::NodeOptions & options)
   declare_parameter("failure_tolerance", rclcpp::ParameterValue(0.0));
 
   // The costmap node is shared between planner and controller
-  nav2_util::init_shared_costmap(std::string{get_namespace()}, "local_costmap");
+  nav2_util::init_shared_costmap(
+    std::string{get_namespace()}, "shared_costmap");
   costmap_ros_ = nav2_util::shared_costmap;
 }
 
